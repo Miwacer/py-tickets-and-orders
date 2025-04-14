@@ -91,14 +91,14 @@ class Ticket(models.Model):
 
         if not (1 <= self.row <= cinema_rows):
             errors["row"] = (
-                    "row number must be in available range: "
-                    "(1, rows): (1, " + str(cinema_rows) + ")"
+                "row number must be in available range: "
+                "(1, rows): (1, " + str(cinema_rows) + ")"
             )
 
         if not (1 <= self.seat <= cinema_seats):
             errors["seat"] = (
-                    "seat number must be in available range: "
-                    "(1, seats_in_row): (1, " + str(cinema_seats) + ")"
+                "seat number must be in available range: "
+                "(1, seats_in_row): (1, " + str(cinema_seats) + ")"
             )
 
         if errors:
