@@ -3,10 +3,10 @@ from db.models import User
 
 def create_user(
         username: str,
-        first_name: str,
-        last_name: str,
         password: str,
-        email: str,
+        first_name: str = None,
+        last_name: str = None,
+        email: str = None,
 ) -> None:
 
     user = User.objects.create_user(

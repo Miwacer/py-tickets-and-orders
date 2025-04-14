@@ -1,25 +1,28 @@
+from datetime import datetime
+
 from django.db import transaction
 from django.db.models import QuerySet
 
-from db.models import Order, Ticket, User
+from db.models import Order, Ticket, User, MovieSession
 
 
 def create_order(
     tickets: list,
     username: str,
-    date: str = None,
+    date: datetime = None,
 ) -> Order:
     user = User.objects.get(username=username)
 
     with transaction.atomic():
         order = Order.objects.create(
-            user=user.id,
-            date=date,
+            user=user,
+            created_at=date,
         )
 
         for ticket in tickets:
+            movie_session = MovieSession.objects.get(id=ticket["movie_session"])
             Ticket.objects.create(
-                movie_session=ticket["movie_session"],
+                movie_session=movie_session,
                 order=order,
                 row=ticket["row"],
                 seat=ticket["seat"],
