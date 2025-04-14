@@ -5,12 +5,11 @@ from db.models import Order, Ticket, User
 
 
 def create_order(
-        tickets: list,
-        username: str,
-        date: str = None,
-    ) -> Order:
+    tickets: list,
+    username: str,
+    date: str = None,
+) -> Order:
     user = User.objects.get(username=username)
-
 
     with transaction.atomic():
         order = Order.objects.create(

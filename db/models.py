@@ -111,10 +111,11 @@ class Ticket(models.Model):
         ]
 
     def __str__(self) -> str:
-        return (
-                self.movie_session.movie.title + " " +
-                str(self.movie_session.show_time) + \
-            f" (row: {self.row}, seat: {self.seat})"
+        return "{} {} (row: {}, seat: {})".format(
+            self.movie_session.movie.title,
+            self.movie_session.show_time,
+            self.row,
+            self.seat,
         )
 
 

@@ -18,6 +18,7 @@ def create_user(
     )
     user.save()
 
+
 def get_user(user_id: int) -> User:
     return User.objects.get(id=user_id)
 
