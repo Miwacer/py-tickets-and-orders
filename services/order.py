@@ -1,8 +1,9 @@
 from datetime import datetime
 
 from django.db import transaction
+from django.db.models import QuerySet
 
-from db.models import Order, Ticket
+from db.models import Order, Ticket, User
 
 
 def create_order(
@@ -10,10 +11,11 @@ def create_order(
         username: str,
         date: str = None,
     ) -> Order:
+    user = User.objects.get(username=username)
 
     with transaction.atomic():
         order = Order.objects.create(
-            username=username,
+            user=user.id,
             date=date,
         )
 
@@ -28,10 +30,10 @@ def create_order(
         return order
 
 
-def get_order(username: str = None) -> Order:
+def get_order(username: str = None) -> QuerySet[Order]:
     queryset = Order.objects.all()
 
     if username:
         queryset = queryset.filter(username=username)
 
-    return queryset[0]
+    return queryset

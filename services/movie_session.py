@@ -1,7 +1,6 @@
 from django.db.models import QuerySet
 
 from db.models import MovieSession, Ticket
-from tests.test_main import tickets
 
 
 def create_movie_session(

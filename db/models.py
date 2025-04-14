@@ -63,7 +63,7 @@ class MovieSession(models.Model):
 
 class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey("User", on_delete=models.CASCADE)
+    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="orders")
 
     def __str__(self) -> str:
         return str(self.created_at)
@@ -109,10 +109,8 @@ class Ticket(models.Model):
 
 
     def __str__(self) -> str:
-        return (f""
-                f"{self.movie_session.movie.title } {self.movie_session.show_time} "
-                f"(row: {self.row}, seat: {self.seat})"
-        )
+        return self.movie_session.movie.title + " " + str(self.movie_session.show_time) + \
+            f" (row: {self.row}, seat: {self.seat})"
 
 
 class User(AbstractUser):
