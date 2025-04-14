@@ -25,7 +25,6 @@ class Movie(models.Model):
     actors = models.ManyToManyField(to=Actor, related_name="movies")
     genres = models.ManyToManyField(to=Genre, related_name="movies")
 
-
     class Meta:
         indexes = [
             models.Index(fields=["title"]),
@@ -63,7 +62,9 @@ class MovieSession(models.Model):
 
 class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="orders")
+    user = models.ForeignKey(
+        "User", on_delete=models.CASCADE, related_name="orders"
+    )
 
     def __str__(self) -> str:
         return str(self.created_at)
@@ -74,7 +75,8 @@ class Order(models.Model):
 
 class Ticket(models.Model):
     movie_session = models.ForeignKey(
-        to=MovieSession, on_delete=models.CASCADE, related_name="movie_sessions"
+        to=MovieSession, on_delete=models.CASCADE,
+        related_name="movie_sessions"
     )
     order = models.ForeignKey(
         to=Order, on_delete=models.CASCADE, related_name="orders"
@@ -82,35 +84,38 @@ class Ticket(models.Model):
     row = models.IntegerField()
     seat = models.IntegerField()
 
-
     def clean(self) -> None:
         cinema_rows = self.movie_session.cinema_hall.rows
         cinema_seats = self.movie_session.cinema_hall.seats_in_row
 
         if self.row >= cinema_rows:
             raise ValidationError(
-                {"row": f"row number must be in available range: (1, rows): (1, {cinema_rows})"}
+                {"row": f"row number must be in available range: "
+                        f"(1, rows): (1, {cinema_rows})"}
             )
 
         if self.seat >= cinema_seats:
             raise ValidationError(
-                {"seat": f"seat number must be in available range: (1, seats_in_row): (1, {cinema_seats})"}
+                {"seat": f"seat number must be in available range: "
+                         f"(1, seats_in_row): (1, {cinema_seats})"}
             )
 
     def save(self, *args, **kwargs) -> None:
         self.full_clean()
         return super().save(*args, **kwargs)
 
-
     class Meta:
         constraints = [
-            UniqueConstraint(fields=["row", "seat", "movie_session"], name="unique_ticket")
+            UniqueConstraint(fields=["row", "seat", "movie_session"],
+                             name="unique_ticket")
         ]
 
-
     def __str__(self) -> str:
-        return self.movie_session.movie.title + " " + str(self.movie_session.show_time) + \
+        return (
+                self.movie_session.movie.title + " " +
+                str(self.movie_session.show_time) + \
             f" (row: {self.row}, seat: {self.seat})"
+        )
 
 
 class User(AbstractUser):

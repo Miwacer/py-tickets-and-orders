@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.db import transaction
 from django.db.models import QuerySet
 
@@ -12,6 +10,7 @@ def create_order(
         date: str = None,
     ) -> Order:
     user = User.objects.get(username=username)
+
 
     with transaction.atomic():
         order = Order.objects.create(
