@@ -14,10 +14,10 @@ def create_order(
     user = User.objects.get(username=username)
 
     with transaction.atomic():
-        order = Order.objects.create(
-            user=user,
-            created_at=date,
-        )
+        order = Order.objects.create(user=user)
+        if date:
+            order.created_at = date
+            order.save()
 
         for ticket in tickets:
             movie_session = MovieSession.objects.get(
